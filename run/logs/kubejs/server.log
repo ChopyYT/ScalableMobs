@@ -1,0 +1,8 @@
+[02:15:30] [INIT] KubeJS 2101.7.1-build.181; MC 2101 NeoForge
+[02:15:30] [INIT] Loaded plugins:
+[02:15:30] [INIT] - dev.latvian.mods.kubejs.BuiltinKubeJSPlugin
+[02:15:30] [INIT] - dev.latvian.mods.kubejs.client.BuiltinKubeJSClientPlugin
+[02:15:30] [INFO] server_scripts:test.js#1: Loaded Java class 'com.thomp.scalablemobs.api.ScalableMobsAPI'
+[02:15:30] [INFO] Loaded script server_scripts:test.js in 0.008 s
+[02:15:30] [INFO] Loaded 1/1 KubeJS server scripts in 0.013 s with 0 errors and 0 warnings
+[02:15:32] [INFO] Server resource reload complete!

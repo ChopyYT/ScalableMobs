@@ -1,0 +1,7 @@
+[02:15:10] [INIT] KubeJS 2101.7.1-build.181; MC 2101 NeoForge
+[02:15:10] [INIT] Loaded plugins:
+[02:15:10] [INIT] - dev.latvian.mods.kubejs.BuiltinKubeJSPlugin
+[02:15:10] [INIT] - dev.latvian.mods.kubejs.client.BuiltinKubeJSClientPlugin
+[02:15:10] [INFO] startup_scripts:main.js#2: Hello, World! (Loaded startup example script)
+[02:15:10] [INFO] Loaded script startup_scripts:main.js in 0.041 s
+[02:15:10] [INFO] Loaded 1/1 KubeJS startup scripts in 0.513 s with 0 errors and 0 warnings

@@ -1,0 +1,16 @@
+# ScalableMobs Configuration
+
+#baseHeight: The start height where the mobs can spawn with level, ex: at y=60 the mob will be lv 1, but at y=44 will be lv 2
+baseHeight = 60
+#distancePerLevel: The distance(in blocks) between levels
+distancePerLevel = 16
+#maxMobLevel: Defines the max level mobs can be
+maxMobLevel = 30
+#healthMultiplier: The multiplier of the health on each level
+healthMultiplier = 0.2
+#damageMultiplier: The multiplier of the damage on each level
+damageMultiplier = 0.04
+#reactiveMobName: Allows to you turn on/off the reactiveNames mechanic (the health changes if they get damaged), this allows to put nametags on mobs
+reactiveMobName = true
+#excludeMobs: List of mobs who would not have level (or will be lv 1)
+excludeMobs = ["minecraft:warden", "minecraft:ender_dragon", "minecraft:wither"]
