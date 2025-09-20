@@ -4,17 +4,10 @@ license="MIT"
 
 [[mods]]
 modId="scalablemobs"
-version="1.0.0"
-displayName="Scalable Mobs"
-description='Mod que asigna niveles visibles a todos los mobs'
+version="0.2.0"
+displayName="ScalableMobs"
+description='A mod to make monsters levelup the deeper you go mining'
 
 # Activar mixins
 mixins = ["scalablemobs.mixins.json"]
-
-[[dependencies.scalablemobs]]
-modId="apothic_attributes"
-mandatory=true
-versionRange="[VERSION,)"
-ordering="NONE"
-side="BOTH"
 
