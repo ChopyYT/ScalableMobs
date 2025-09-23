@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="scalablemobs"
-version="0.2.0"
+version="0.3.0"
 displayName="ScalableMobs"
 description='A mod to make monsters levelup the deeper you go mining'
 
