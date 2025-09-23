@@ -14,8 +14,6 @@ object ScalableMobsAPI {
         @JvmStatic
         fun setMobLevel(mob: Mob, level: Int) {
             mob.persistentData.putInt("scalablemobs:level", level)
-            val mobId = mob.type.toString()
-            val mobName = mob.type.description.string
 
             mob.getAttribute(Attributes.MAX_HEALTH)
                 ?.removeModifier(ResourceLocation.tryParse("scalablemobs:level_health")!!)
@@ -25,23 +23,28 @@ object ScalableMobsAPI {
 
             val healthModifier = AttributeModifier(
                 ResourceLocation.tryParse("scalablemobs:level_health")!!,
-                level * ConfigManager.data.healthMultiplier,
+                ConfigManager.data.healthMultiplier * level,
                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE
             )
             val damageModifier = AttributeModifier(
                 ResourceLocation.tryParse("scalablemobs:level_damage")!!,
-                level * ConfigManager.data.damageMultiplier,
+                 ConfigManager.data.damageMultiplier * level,
                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE
             )
-            mob.getAttribute(Attributes.MAX_HEALTH)?.addPermanentModifier(healthModifier)
-            mob.getAttribute(Attributes.ATTACK_DAMAGE)?.addPermanentModifier(damageModifier)
+            mob.getAttribute(Attributes.MAX_HEALTH)?.addOrReplacePermanentModifier(healthModifier)
+            mob.getAttribute(Attributes.ATTACK_DAMAGE)?.addOrReplacePermanentModifier(damageModifier)
 
             mob.health = mob.getAttribute(Attributes.MAX_HEALTH)?.value?.toFloat() ?: mob.health
         }
 
 
         @JvmStatic
-        fun getMobBaseName(mob: Mob): String = mob.persistentData.getString("scalablemobs:base_name")
+        fun getMobName(mob: Mob): String = mob.persistentData.getString("scalablemobs:base_name")
+
+        @JvmStatic
+        fun setMobName(mob: Mob, name: String) {
+        mob.persistentData.putString("scalablemobs:base_name", name)
+    }
 
         @JvmStatic
         fun isExcluded(mob: Mob): Boolean = ConfigManager.data.excludeMobs.contains(mob.type.toString())
