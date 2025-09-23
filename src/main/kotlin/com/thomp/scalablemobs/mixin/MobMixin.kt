@@ -11,7 +11,9 @@ import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.SpawnGroupData
 import net.minecraft.world.entity.ai.attributes.AttributeModifier
 import net.minecraft.world.entity.ai.attributes.Attributes
-import net.minecraft.world.entity.monster.Monster
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon
+import net.minecraft.world.entity.boss.wither.WitherBoss
+import net.minecraft.world.entity.monster.Enemy
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.Unique
 import org.spongepowered.asm.mixin.injection.At
@@ -27,7 +29,7 @@ class MobMixin {
 
     @Unique
     private var scalableBaseName: String = ""
-
+    //this affects to spawned mobs or /summon
     @Inject(method = ["finalizeSpawn"], at = [At("RETURN")])
     fun onSpawnInject(ci: CallbackInfoReturnable<SpawnGroupData?>) {
         val mob = this as Mob
@@ -40,23 +42,26 @@ class MobMixin {
                 val referenceY = ConfigManager.data.baseHeight
                 val dy = referenceY - mob.blockY
                 if (dy > 0) {
-                    val levelFromDepth = (dy / ConfigManager.data.distancePerLevel).toInt() + 1
+                    val levelFromDepth = (dy / ConfigManager.data.distancePerLevel) + 1
                     scalableLevel = Mth.clamp(levelFromDepth, 1, ConfigManager.data.maxMobLevel)
                 } else {
                     scalableLevel = 1
                     }
                 }
             }
-        if (mob is Monster) {
+        if (mob is WitherBoss) {
+            scalableLevel = ConfigManager.data.witherBossLevel
+        } else if (mob is EnderDragon){
+            scalableLevel = ConfigManager.data.enderDragonLevel
+        }
+        if (mob is Enemy || mob is WitherBoss) {
             scalableBaseName = mob.type.description.string
             mob.persistentData.putInt("scalablemobs:level", scalableLevel)
             mob.persistentData.putString("scalablemobs:base_name", scalableBaseName)
             mob.customName = Component.literal("$scalableBaseName [")
-                .append(Component.literal("Lv$scalableLevel").withStyle { it.withColor(TextColor.fromRgb(0xFFFF55)) }) // azul
+                .append(Component.literal("Lv$scalableLevel").withStyle { it.withColor(TextColor.fromRgb(0xFFFF55)) })
                 .append(Component.literal("]"))
 
-        }
-        if (!ConfigManager.data.excludeMobs.contains(mobId)) {
             val healthModifier = AttributeModifier(
                 ResourceLocation.tryParse("scalablemobs:level_health")!!,
                 scalableLevel * ConfigManager.data.healthMultiplier,
@@ -67,11 +72,12 @@ class MobMixin {
                 scalableLevel * ConfigManager.data.damageMultiplier,
                 AttributeModifier.Operation.ADD_MULTIPLIED_BASE
             )
-            mob.getAttribute(Attributes.MAX_HEALTH)?.addPermanentModifier(healthModifier)
-            mob.getAttribute(Attributes.ATTACK_DAMAGE)?.addPermanentModifier(damageModifier)
+            mob.getAttribute(Attributes.MAX_HEALTH)?.addOrReplacePermanentModifier(healthModifier)
+            mob.getAttribute(Attributes.ATTACK_DAMAGE)?.addOrReplacePermanentModifier(damageModifier)
             mob.health = mob.getAttribute(Attributes.MAX_HEALTH)?.value?.toFloat() ?: mob.health
+            }
         }
-    }
+
 
     @Inject(method = ["addAdditionalSaveData"], at = [At("HEAD")])
     fun saveData(tag: CompoundTag, ci: CallbackInfo) {
@@ -94,16 +100,18 @@ class MobMixin {
 
         if (mob.tickCount % 3 != 0) return
         scalableLevel = mob.persistentData.getInt("scalablemobs:level")
+        scalableBaseName = mob.persistentData.getString("scalablemobs:base_name")
         if (scalableLevel <= 0) return
 
         val maxHealth = mob.getAttribute(Attributes.MAX_HEALTH)?.value ?: mob.health.toDouble()
         val currentHealth = mob.health.toInt()
         val levelText = "Lv$scalableLevel"
+        val name = if (!scalableBaseName.isEmpty()) scalableBaseName else mob.type.description.string
         val currentHealthText = currentHealth.toString()
         val maxHealthText = maxHealth.toInt().toString()
 
         if (ConfigManager.data.reactiveMobName) {
-            mob.customName = Component.literal("$scalableBaseName [")
+            mob.customName = Component.literal("$name [")
                 .append(Component.literal(levelText).withStyle { it.withColor(TextColor.fromRgb(0xFFFF55)) })
                 .append(Component.literal("] ["))
                 .append(Component.literal(currentHealthText).withStyle { it.withColor(TextColor.fromRgb(0xFF5555)) })
@@ -113,3 +121,4 @@ class MobMixin {
         }
     }
 }
+

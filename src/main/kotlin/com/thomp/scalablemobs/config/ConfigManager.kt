@@ -39,6 +39,7 @@ object ConfigManager {
                         val clean = value.removePrefix("[").removeSuffix("]").split(",")
                         data.excludeMobs = clean.map { it.trim().removeSurrounding("\"") }.toMutableList()
                     }
+                    "enderDragonLevel" -> data.enderDragonLevel = value.toIntOrNull() ?: data.enderDragonLevel
                 }
             }
 
@@ -68,6 +69,10 @@ object ConfigManager {
             sb.appendLine("reactiveMobName = ${data.reactiveMobName}")
             sb.appendLine("#excludeMobs: List of mobs who would not have level (or will be lv 1)")
             sb.appendLine("excludeMobs = [${data.excludeMobs.joinToString(", ") { "\"$it\"" }}]")
+            sb.appendLine("#enderDragonLevel: Allows to put an specific level to the Ender Dragon")
+            sb.appendLine("enderDragonLevel = ${data.enderDragonLevel}")
+            sb.appendLine("#enderDragonLevel: Allows to put an specific level to the Wither")
+            sb.appendLine("witherBossLevel = ${data.witherBossLevel}")
 
             configFile.parentFile.mkdirs()
             configFile.writeText(sb.toString())
