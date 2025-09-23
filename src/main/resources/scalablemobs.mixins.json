@@ -4,7 +4,9 @@
   "package": "com.thomp.scalablemobs.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MobMixin"
+    "MobMixin",
+    "EnderDragonMixin",
+    "WitherMixin"
   ],
   "injectors": {
     "defaultRequire": 1
